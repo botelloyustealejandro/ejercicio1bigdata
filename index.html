@@ -1,1 +1,174 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Usuarios</title>
+    <link rel="stylesheet" href="estilos.css">
+</head>
+<body>
 
+    <div class="container">
+        <div class="form-card">
+
+            <h1>Registro de Usuarios</h1>
+            <p class="subtitle">
+                Complete el formulario para registrar un nuevo usuario.
+            </p>
+
+            <form id="registroForm" novalidate>
+
+                <div class="form-group">
+                    <label for="nombre">Nombre completo *</label>
+                    <input
+                        type="text"
+                        id="nombre"
+                        name="nombre"
+                        placeholder="Introduzca su nombre completo">
+                    <small class="error" id="errorNombre"></small>
+                </div>
+
+                <div class="form-group">
+                    <label for="correo">Correo electrónico *</label>
+                    <input
+                        type="email"
+                        id="correo"
+                        name="correo"
+                        placeholder="ejemplo@correo.com">
+                    <small class="error" id="errorCorreo"></small>
+                </div>
+
+                <div class="form-group">
+                    <label for="telefono">Teléfono *</label>
+                    <input
+                        type="tel"
+                        id="telefono"
+                        name="telefono"
+                        placeholder="+34 600 123 456">
+                    <small class="error" id="errorTelefono"></small>
+                </div>
+
+                <div class="form-group">
+                    <label for="ciudad">Ciudad *</label>
+                    <input
+                        type="text"
+                        id="ciudad"
+                        name="ciudad"
+                        placeholder="Madrid">
+                    <small class="error" id="errorCiudad"></small>
+                </div>
+
+                <button type="submit" class="btn-registrar">
+                    Registrar usuario
+                </button>
+
+            </form>
+
+            <div id="mensajeExito" class="mensaje-exito">
+                ✅ Usuario registrado correctamente.
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        const formulario = document.getElementById("registroForm");
+        const mensajeExito = document.getElementById("mensajeExito");
+
+        function limpiarErrores() {
+            document.getElementById("errorNombre").textContent = "";
+            document.getElementById("errorCorreo").textContent = "";
+            document.getElementById("errorTelefono").textContent = "";
+            document.getElementById("errorCiudad").textContent = "";
+        }
+
+        function validarCorreo(correo) {
+            const expresion =
+                /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return expresion.test(correo);
+        }
+
+        formulario.addEventListener("submit", async function (e) {
+            e.preventDefault();
+
+            limpiarErrores();
+            mensajeExito.style.display = "none";
+
+            const nombre = document.getElementById("nombre").value.trim();
+            const correo = document.getElementById("correo").value.trim();
+            const telefono = document.getElementById("telefono").value.trim();
+            const ciudad = document.getElementById("ciudad").value.trim();
+
+            let formularioValido = true;
+
+            if (nombre === "") {
+                document.getElementById("errorNombre").textContent =
+                    "El nombre es obligatorio.";
+                formularioValido = false;
+            }
+
+            if (correo === "") {
+                document.getElementById("errorCorreo").textContent =
+                    "El correo electrónico es obligatorio.";
+                formularioValido = false;
+            } else if (!validarCorreo(correo)) {
+                document.getElementById("errorCorreo").textContent =
+                    "Introduzca un correo electrónico válido.";
+                formularioValido = false;
+            }
+
+            if (telefono === "") {
+                document.getElementById("errorTelefono").textContent =
+                    "El teléfono es obligatorio.";
+                formularioValido = false;
+            }
+
+            if (ciudad === "") {
+                document.getElementById("errorCiudad").textContent =
+                    "La ciudad es obligatoria.";
+                formularioValido = false;
+            }
+
+            if (!formularioValido) {
+                return;
+            }
+
+            const datosUsuario = {
+                nombre,
+                correo,
+                telefono,
+                ciudad
+            };
+
+            console.log("Datos listos para enviar:", datosUsuario);
+
+            /*
+            Preparado para una futura API REST:
+
+            try {
+                const respuesta = await fetch(
+                    "https://api.ejemplo.com/usuarios",
+                    {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify(datosUsuario)
+                    }
+                );
+
+                const resultado = await respuesta.json();
+                console.log(resultado);
+
+            } catch(error) {
+                console.error(error);
+            }
+            */
+
+            mensajeExito.style.display = "block";
+            formulario.reset();
+        });
+    </script>
+
+</body>
+</html>
